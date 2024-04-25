@@ -5,7 +5,7 @@
 
 DELIMITER $$
 
-DROP PROCEDURE ID EXISTS ComputeAverageScoreForUser;
+DROP PROCEDURE IF EXISTS ComputeAverageScoreForUser;
 CREATE PROCEDURE ComputeAverageScoreForUser (IN user_id INT)
 BEGIN
 	UPDATE users

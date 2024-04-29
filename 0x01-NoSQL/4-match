@@ -1,0 +1,7 @@
+// list all documents with name="Holberton school" in the collection school:
+db.schoo.findOne
+(
+    {
+        name="Holberton school"
+    }
+)

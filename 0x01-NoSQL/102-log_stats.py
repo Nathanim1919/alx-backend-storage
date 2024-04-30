@@ -4,8 +4,10 @@
 from pymongo import MongoClient
 
 
-def log_stats(mongo_collection):
+def log_stats():
     """Log stats"""
+    client = MongoClient('mongodb://127.0.0.1:27017')
+    mongo_collection = client.logs.nginx
     print(f"{mongo_collection.estimated_document_count()} logs")
     print("Methods:")
     print(f"\tmethod GET: {mongo_collection.count_documents({'method': 'GET'})}")
@@ -24,6 +26,4 @@ def log_stats(mongo_collection):
 
 
 if __name__ == "__main__":
-    client = MongoClient('mongodb://127.0.0.1:27017')
-    logs_collection = client.logs.nginx
-    log_stats(logs_collection)
+    log_stats()

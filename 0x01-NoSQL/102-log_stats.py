@@ -21,8 +21,12 @@ def log_stats():
         {"$group": {"_id": "$ip", "count": {"$sum": 1}}},
         {"$sort": {"count": -1}}
     ])
+    i = 0
     for ip in ips:
+        if i == 10:
+            break
         print(f"\t{ip.get('_id')}: {ip.get('count')}")
+        i += 1
 
 
 if __name__ == "__main__":

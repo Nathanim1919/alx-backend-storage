@@ -18,7 +18,7 @@ def track_get_page(fn: Callable) -> Callable:
         if cached_html:
             return cached_html.decode('utf-8')
         html = fn(url)
-        client.setex(f"cached:{url}", 10, html)
+        client.set(f'{url}', html, 10)
         return html
     return wrapper
 

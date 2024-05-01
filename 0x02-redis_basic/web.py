@@ -3,8 +3,6 @@
 
 import redis
 import requests
-from typing import Callable
-from functools import wraps
 
 red = redis.Redis()
 
@@ -19,5 +17,5 @@ def get_page(url: str) -> str:
         return cached.decode('utf-8')
     else:
         r = requests.get(url)
-        red.set(url, r.text)
+        red.set(url, r.text, ex=10)
         return r.text

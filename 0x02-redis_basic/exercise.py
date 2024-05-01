@@ -8,6 +8,7 @@ from functools import wraps
 
 
 def count_calls(method: callable) -> callable:
+    """Decorator that increments the count for a key"""
     key = method.__qualname__
 
     @wraps(method)
@@ -18,6 +19,7 @@ def count_calls(method: callable) -> callable:
 
 
 def call_history(method: callable) -> callable:
+    """Decorator that stores the history of inputs and outputs for a function"""
     inputKey = method.__qualname__ + ':inputs'
     outputKey = method.__qualname__ + ':outputs'
 
@@ -31,6 +33,7 @@ def call_history(method: callable) -> callable:
 
 
 def replay(method: callable) -> None:
+    """Display the history of calls of a particular function"""
     key = method.__qualname__
     redis = method.__self__._redis
     count = redis.get(key).decode('utf-8')

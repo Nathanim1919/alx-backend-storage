@@ -21,7 +21,7 @@ def track_get_page(fn: Callable) -> Callable:
         client.incr(f'count:{url}')
         cached_page = client.get(f'{url}')
         if cached_page:
-            return cached_page.decode('utf-8')
+            return cached_page
         response = fn(url)
         client.set(f'{url}', response, 10)
         return response
@@ -34,3 +34,9 @@ def get_page(url: str) -> str:
     """
     response = requests.get(url)
     return response.text
+
+
+if __name__ == '__main__':
+    url = 'http://slowwly.robertomurray.co.uk/delay/5000/url/http://www.google.co.uk'
+    print(get_page(url))
+    print(get_page(url))

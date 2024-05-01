@@ -3,19 +3,27 @@
 
 import redis
 import requests
+from typing import Callable
+from functools import wraps
 
-red = redis.Redis()
+
+def track_get_page(fn: Callable) -> Callable:
+    """track the number of times a URL is called"""
+    @wraps(fn)
+    def wrapper(url):
+        """wrapper function"""
+        client = redis.Redis()
+        client.incr(f"count:{url}")
+        cached_html = client.get(f"cached:{url}")
+        if cached_html:
+            return cached_html.decode('utf-8')
+        html = fn(url)
+        client.setex(f"cached:{url}", 10, html)
+        return html
+    return wrapper
 
 
+@track_get_page
 def get_page(url: str) -> str:
-    """get the HTML content of a particular URL and return it"""
-    key = f"count:{url}"
-    red.incr(key)
-    red.expire(key, 10)
-    cached = red.get(url)
-    if cached:
-        return cached.decode('utf-8')
-    else:
-        r = requests.get(url)
-        red.set(url, r.text, ex=10)
-        return r.text
+    """get page"""
+    return requests.get(url).text
